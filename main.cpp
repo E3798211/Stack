@@ -4,7 +4,7 @@
 #define ERR_WHERE "In " << __FILE__ << ": " << __func__ << "(): " << ex.what()
 
 
-/// Mistakes
+/// Error codes
 enum ERR_CODE{
     SUCCESS = 0,
     BAD_ALLOC
@@ -20,26 +20,32 @@ class Stack {
 private:
     /// Current amount of elements in stack
     int _n_elem = 0;
+    
     /// Array that contains elements
     MyType* _stack = nullptr;
+    
 public:
-    /// Constructor empty
+    /// Default Constructor
     Stack();
+    
     /// Constructor with parameters
     /**
         \param [in] elements    Array with elements to be placed in stack.
         \param [in] n_elements  Amount of elements to be placed.
     */
     Stack(MyType* elements, int n_elements);
+    
     /// Destructor
     ~Stack();
+    
     /// Pop element
-    int Pop();
+    int Pop();  // Интерфейс сомнительный
+    
     /// Push element
     /**
         \param [in] new_elem    New element in stack.
     */
-    int Push(MyType* new_elem);
+    int Push(MyType* new_elem);  // Интерфейс сомнительный, можно по значению (в С++ - по константной ссылке)
 
     //DEBUG
     MyType Get(int pos);
@@ -65,10 +71,9 @@ int main()
     cout << st.Get(2) << endl;
 }
 
-Stack::Stack()
-{
-    _stack = new MyType;
-}
+Stack::Stack() :
+    _stack (new MyType[1])  // new для отд. эл-та и для массива СУЩЕСТВЕННО отличаются при удалении
+    {}
 
 Stack::Stack(MyType* elements, int n_elements)
 {
@@ -90,7 +95,9 @@ int Stack::Push(MyType* new_elem)
     //Exceptions
     assert(new_elem != nullptr);
 
-    MyType* tmp_arr = nullptr;
+    // Все это до строки 126 надо вынести в отд ф-ю reserve
+    
+    MyType* tmp_arr = nullptr;  // не нужен вообще
     try{
         tmp_arr = new MyType [_n_elem];
     }
@@ -136,3 +143,6 @@ MyType Stack::Get(int pos)
 {
     return _stack[pos];
 }
+
+
+СМ. http://gofile.me/2fK55/G17D30a1P
