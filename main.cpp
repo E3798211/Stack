@@ -20,10 +20,10 @@ typedef double MyType;
 class Stack {
 private:
     /// Current amount of elements in stack
+    int _n_elem = 0;
     /// Array that contains elements
     MyType* _stack = nullptr;
 public:
-    int _n_elem = 0;
     /// Constructor empty
     Stack();
     /// Constructor with parameters
@@ -63,24 +63,30 @@ int main()
 
     MyType* elem_ptr = &a;
 
-    cout << "elems = " << st._n_elem << endl;
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
 
-    cout << "elems = " << st._n_elem << endl;
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
 
-    cout << "elems = " << st._n_elem << endl;
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
 
-    //cout << "elems = " << st._n_elem << endl;
-
-    cout << "elems = " << st._n_elem << endl;
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
 
+    st.Push(&c);
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+
+    st.Push(&b);
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+
+    st.~Stack();
 
     //cout << st.Get(0) << endl;
     //cout << st.Get(1) << endl;
@@ -104,7 +110,7 @@ Stack::Stack(MyType* elements, int n_elements)
 
 Stack::~Stack()
 {
-    delete [] _stack;
+    if (_n_elem != 0)   delete [] _stack;
 }
 
 int Stack::Push(MyType* new_elem)
