@@ -7,7 +7,8 @@
 /// Mistakes
 enum ERR_CODE{
     SUCCESS = 0,
-    BAD_ALLOC
+    BAD_ALLOC,
+    NOT_ENOUGH_ELEMENTS
 };
 
 
@@ -19,10 +20,10 @@ typedef double MyType;
 class Stack {
 private:
     /// Current amount of elements in stack
-    int _n_elem = 0;
     /// Array that contains elements
     MyType* _stack = nullptr;
 public:
+    int _n_elem = 0;
     /// Constructor empty
     Stack();
     /// Constructor with parameters
@@ -34,7 +35,7 @@ public:
     /// Destructor
     ~Stack();
     /// Pop element
-    int Pop();
+    int Pop(MyType* pop_elem);
     /// Push element
     /**
         \param [in] new_elem    New element in stack.
@@ -51,18 +52,39 @@ using namespace std;
 
 int main()
 {
-    MyType a = 5,
-           b = 4,
-           c = 3;
+    MyType a = 10,
+           b = 11,
+           c = 12;
 
     Stack st;
     st.Push(&a);
     st.Push(&b);
     st.Push(&c);
 
-    cout << st.Get(0) << endl;
-    cout << st.Get(1) << endl;
-    cout << st.Get(2) << endl;
+    MyType* elem_ptr = &a;
+
+    cout << "elems = " << st._n_elem << endl;
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+
+    cout << "elems = " << st._n_elem << endl;
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+
+    cout << "elems = " << st._n_elem << endl;
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+
+    //cout << "elems = " << st._n_elem << endl;
+
+    cout << "elems = " << st._n_elem << endl;
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+
+
+    //cout << st.Get(0) << endl;
+    //cout << st.Get(1) << endl;
+    //cout << st.Get(2) << endl;
 }
 
 Stack::Stack()
@@ -127,7 +149,53 @@ int Stack::Push(MyType* new_elem)
     return SUCCESS;
 }
 
+int Stack::Pop(MyType* pop_elem)
+{
+    //Exceptions
+    assert(pop_elem != nullptr);
 
+    if(_n_elem < 1){
+        cout << "Not enough elements in the stack" << endl;
+        return NOT_ENOUGH_ELEMENTS;
+    }
+
+
+    MyType* tmp_arr = nullptr;
+    try{
+        tmp_arr = new MyType [_n_elem];
+    }
+    catch(const bad_alloc& ex){
+        cout << ERR_WHERE << ". Cannot allocate " << _n_elem << " bytes." << endl;
+        return BAD_ALLOC;
+    }
+
+
+    for(int i = 0; i < _n_elem; i++)
+        tmp_arr[i] = _stack[i];
+
+    *pop_elem = _stack[_n_elem - 1];
+
+
+    delete [] _stack;
+    try{
+        _stack = new MyType [_n_elem - 1];
+    }
+    catch(const bad_alloc& ex){
+        cout << ERR_WHERE << ". Cannot allocate " << _n_elem - 1 << " bytes." << endl;
+        return BAD_ALLOC;
+    }
+
+    for(int i = 0; i < _n_elem - 1; i++)
+        _stack[i] = tmp_arr[i];
+
+    _n_elem--;
+
+    //Memory free
+    delete [] tmp_arr;
+    tmp_arr = nullptr;
+
+    return SUCCESS;
+}
 
 
 // Debug
