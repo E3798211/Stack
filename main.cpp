@@ -4,7 +4,7 @@
 #define ERR_WHERE "In " << __FILE__ << ": " << __func__ << "(): " << ex.what()
 
 
-/// Mistakes
+/// Error codes
 enum ERR_CODE{
     SUCCESS = 0,
     BAD_ALLOC,
@@ -12,19 +12,26 @@ enum ERR_CODE{
 };
 
 
-/// Type to be saved in stack
+/// Type of data to be saved in stack
 typedef double MyType;
 
 
 /// Stack class
 class Stack {
 private:
+    /// Current size
+    int _size = 0;
     /// Current amount of elements in stack
     int _n_elem = 0;
     /// Array that contains elements
     MyType* _stack = nullptr;
+    /// Resizing stack
+    /**
+        \param new_size     New size of the stack
+    */
+    int StackResize(int new_size);
 public:
-    /// Constructor empty
+    /// Default constructor
     Stack();
     /// Constructor with parameters
     /**
@@ -42,13 +49,21 @@ public:
     */
     int Push(MyType* new_elem);
 
+
+
     //DEBUG
-    MyType Get(int pos);
+    MyType GetPos(int pos)  {return _stack[pos];}
+
+    int GetSize()           {return _size;}
+
+    int GetNElem()          {return _n_elem;}
 
 };
 
 
 using namespace std;
+
+//=================================================================
 
 int main()
 {
@@ -57,34 +72,62 @@ int main()
            c = 12;
 
     Stack st;
+    cout << "init" << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
     st.Push(&a);
+    cout << "elem 'a' added." << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
     st.Push(&b);
+    cout << "elem 'b' added." << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
     st.Push(&c);
+    cout << "elem 'c' added." << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
+
 
     MyType* elem_ptr = &a;
 
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
+    cout << "BEGIN" << endl;
 
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
 
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
 
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
+
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
 
     st.Push(&c);
+    cout << "elem 'c' added." << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
+
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
+
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
 
     st.Push(&b);
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
+    cout << "elem 'b' added." << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
 
     cout << "error = " << st.Pop(elem_ptr) << endl;
     cout << "elem = " << *elem_ptr << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
+
+    cout << "error = " << st.Pop(elem_ptr) << endl;
+    cout << "elem = " << *elem_ptr << endl;
+    cout << "_size = " << st.GetSize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
 
     st.~Stack();
 
@@ -93,10 +136,51 @@ int main()
     //cout << st.Get(2) << endl;
 }
 
+//=================================================================
+
+// Private
+int Stack::StackResize(int new_size)
+{
+    // Exceptions
+    assert(new_size > 0);
+
+
+    MyType* new_stack = nullptr;
+    try{
+        new_stack = new MyType [new_size];
+    }
+    catch(const bad_alloc& ex){
+        cout << ERR_WHERE << ". Cannot allocate " << new_size << " bytes." << endl;
+        return BAD_ALLOC;
+    }
+
+
+    int _min = (_n_elem < new_size)? _n_elem : new_size;
+    for(int i = 0; i < _min; i++)
+        new_stack[i] = _stack[i];
+
+    //Swap
+    MyType* tmp = _stack;
+    _stack = new_stack;
+    new_stack = tmp;
+
+    //Clearing memory
+    delete [] new_stack;
+    new_stack = nullptr;
+
+    return SUCCESS;
+}
+
+// Public
 Stack::Stack()
 {
-    _stack = new MyType;
+    _stack  = new MyType[1];
+    _size   = 1;
+    _n_elem = 0;
 }
+
+
+// SOULD BE CHECKED!!!
 
 Stack::Stack(MyType* elements, int n_elements)
 {
@@ -104,8 +188,13 @@ Stack::Stack(MyType* elements, int n_elements)
     assert(elements != nullptr);
     assert(n_elements > 0);
 
+    int new_size = 1;
+    while(new_size < n_elements)
+        new_size *= 2;
+
+    _stack  = elements;
+    _size   = new_size;
     _n_elem = n_elements;
-    _stack = elements;
 }
 
 Stack::~Stack()
@@ -118,39 +207,17 @@ int Stack::Push(MyType* new_elem)
     //Exceptions
     assert(new_elem != nullptr);
 
-    MyType* tmp_arr = nullptr;
-    try{
-        tmp_arr = new MyType [_n_elem];
+
+    // SHOULD BE CHECKED FOR BAD ALLOC IN StackResize()
+
+
+    if(_n_elem >= _size){
+        _size *= 2;
+        StackResize(_size);
     }
-    catch(const bad_alloc& ex){
-        cout << ERR_WHERE << ". Cannot allocate " << _n_elem << " bytes." << endl;
-        return BAD_ALLOC;
-    }
-
-
-    for(int i = 0; i < _n_elem; i++)
-        tmp_arr[i] = _stack[i];
-
-
-    delete [] _stack;
-    try{
-        _stack = new MyType [_n_elem + 1];
-    }
-    catch(const bad_alloc& ex){
-        cout << ERR_WHERE << ". Cannot allocate " << _n_elem + 1 << " bytes." << endl;
-        return BAD_ALLOC;
-    }
-
-
-    for(int i = 0; i < _n_elem; i++)
-        _stack[i] = tmp_arr[i];
 
     _stack[_n_elem] = *new_elem;
     _n_elem++;
-
-    //Memory free
-    delete [] tmp_arr;
-    tmp_arr = nullptr;
 
     return SUCCESS;
 }
@@ -166,47 +233,17 @@ int Stack::Pop(MyType* pop_elem)
     }
 
 
-    MyType* tmp_arr = nullptr;
-    try{
-        tmp_arr = new MyType [_n_elem];
-    }
-    catch(const bad_alloc& ex){
-        cout << ERR_WHERE << ". Cannot allocate " << _n_elem << " bytes." << endl;
-        return BAD_ALLOC;
-    }
-
-
-    for(int i = 0; i < _n_elem; i++)
-        tmp_arr[i] = _stack[i];
-
     *pop_elem = _stack[_n_elem - 1];
-
-
-    delete [] _stack;
-    try{
-        _stack = new MyType [_n_elem - 1];
-    }
-    catch(const bad_alloc& ex){
-        cout << ERR_WHERE << ". Cannot allocate " << _n_elem - 1 << " bytes." << endl;
-        return BAD_ALLOC;
-    }
-
-    for(int i = 0; i < _n_elem - 1; i++)
-        _stack[i] = tmp_arr[i];
-
     _n_elem--;
 
-    //Memory free
-    delete [] tmp_arr;
-    tmp_arr = nullptr;
+
+    // SHOULD BE CHECKED FOR BAD ALLOC IN StackResize()
+
+
+    if(_n_elem < _size / 2){
+        _size /= 2;
+        StackResize(_size);
+    }
 
     return SUCCESS;
-}
-
-
-// Debug
-
-MyType Stack::Get(int pos)
-{
-    return _stack[pos];
 }
