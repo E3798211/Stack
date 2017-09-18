@@ -1,8 +1,20 @@
 #include <iostream>
 #include <assert.h>
 
-#define ERR_WHERE "In " << __FILE__ << ": " << __func__ << "(): " << ex.what()
+// DEBUG
+//=================================================================
+// Comment next line if you want to turn debug off
+#define _DEBUG
 
+#if defined (_DEBUG)
+    #define DEBUG
+#else
+    #define DEBUG if(0)
+#endif // defined
+
+//=================================================================
+
+#define ERR_WHERE "In " << __FILE__ << ": " << __func__ << "(): " << ex.what()
 
 /// Error codes
 enum ERR_CODE{
@@ -51,17 +63,18 @@ public:
 
 
 
-    //DEBUG
+    // DEBUG
     MyType GetPos(int pos)  {return _stack[pos];}
 
     int GetSize()           {return _size;}
 
     int GetNElem()          {return _n_elem;}
-
 };
 
 
-using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
 
 //=================================================================
 
@@ -136,6 +149,7 @@ int main()
     //cout << st.Get(2) << endl;
 }
 
+// Class functions
 //=================================================================
 
 // Private
@@ -149,8 +163,8 @@ int Stack::StackResize(int new_size)
     try{
         new_stack = new MyType [new_size];
     }
-    catch(const bad_alloc& ex){
-        cout << ERR_WHERE << ". Cannot allocate " << new_size << " bytes." << endl;
+    catch(const std::bad_alloc& ex){
+        DEBUG cout << ERR_WHERE << ". Cannot allocate " << new_size << " bytes." << endl;
         return BAD_ALLOC;
     }
 
@@ -228,7 +242,7 @@ int Stack::Pop(MyType* pop_elem)
     assert(pop_elem != nullptr);
 
     if(_n_elem < 1){
-        cout << "Not enough elements in the stack" << endl;
+        DEBUG cout << "Not enough elements in the stack" << endl;
         return NOT_ENOUGH_ELEMENTS;
     }
 
@@ -247,3 +261,5 @@ int Stack::Pop(MyType* pop_elem)
 
     return SUCCESS;
 }
+
+
