@@ -76,11 +76,15 @@ int main()
     st.Push(&a);
     st.Push(&b);
     st.Pop(&a);
+    st.Pop(&a);
+    st.Pop(&a);
+    st.Pop(&a);
     //cout << a << endl;
     st.Pop(&a);
-    *(int*)&st = 0;
+    //*(int*)&st = 0;
     st.Pop(&a);
     //cout << a << endl;
+    st.~Stack();
     st.~Stack();
 
     //cout << st.Get(0) << endl;

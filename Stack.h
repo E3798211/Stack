@@ -26,24 +26,26 @@ enum ERR_CODE{
     SUCCESS = 0,
     BAD_ALLOC,
     NOT_ENOUGH_ELEMENTS,
+    OVERFLOWN,
 
     FIRST_EDGE_BROKEN,
     SCOND_EDGE_BROKEN,
     HASH_WRONG
 };
 
-#define ASSERT()                                            \
-    switch (Stack::Ok()){                                   \
-        case FIRST_EDGE_BROKEN:                             \
-            Stack::Dump(__func__, FIRST_EDGE_BROKEN);       \
-            break;                                          \
-        case SCOND_EDGE_BROKEN:                             \
-            Stack::Dump(__func__, SCOND_EDGE_BROKEN);       \
-            break;                                          \
-        case HASH_WRONG:                                    \
-            Stack::Dump(__func__, HASH_WRONG);              \
-            break;                                          \
-    }
+/*
+#define ASSERT()  {                                         \
+            int err = Stack::Ok();                          \
+            if (err != SUCCESS){                            \
+                Stack::Dump(__func__, err);                 \
+                assert (0);                                 \
+            }                                               \
+        }
+*/
+#define ASSERT()  {                                         \
+            int err = Stack::Ok();                          \
+                Stack::Dump(__func__, err);                 \
+        }
 
 /// Type of data to be saved in stack
 typedef double MyType;
@@ -52,8 +54,10 @@ const MyType EDGE = 123456789;
 const MyType EMPT = 987654321;
 const int DELETED = -1;
 
-const int EDGE_HASH = 0;
-const int EMPT_HASH = 1;
+const int EDGE_HASH = 1;
+const int EMPT_HASH = 2;
+
+const long long int MAX_SIZE = 10000000000;
 
 /// Stack class
 class Stack {
@@ -62,10 +66,10 @@ private:
     int _edge_1 = EDGE;
 
     /// Current size
-    int _size   = 0;
+    long long int _size   = 0;
 
     /// Current amount of elements in stack
-    int _n_elem = 0;
+    long long int _n_elem = 0;
 
     /// Array that contains elements
     MyType* _stack = nullptr;
@@ -74,10 +78,10 @@ private:
     /**
         \param new_size     New size of the stack
     */
-    int StackResize(int new_size);
+    int StackResize(long long int new_size);
 
     // Hash :)
-    int _hash = 0;
+    long long int _hash = 0;
 
     /// Hash-counter
     int HashCount();
@@ -108,7 +112,7 @@ public:
     // Verifier
     int  Ok();
 
-    bool Dump(const char* func_name, int err_code);
+    bool Dump(const char* func_name, int err_code = SUCCESS);
 
 
     MyType GetPos(int pos)  {return _stack[pos];}

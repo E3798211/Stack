@@ -2,7 +2,7 @@
 
 // Private
 
-int Stack::StackResize(int new_size)
+int Stack::StackResize(long long int new_size)
 {
     // Exceptions
     assert(new_size > 0);
@@ -28,11 +28,11 @@ int Stack::StackResize(int new_size)
     new_stack[0]            = EDGE;
     new_stack[new_size - 1] = EDGE;
 
-    int _min = (_n_elem < new_size)? _n_elem : new_size;
-    for(int i = 0; i < _min + 1; i++)
+    long long int _min = (_n_elem < new_size)? _n_elem : new_size;
+    for(long long int i = 0; i < _min + 1; i++)
         new_stack[i] = _stack[i];
 
-    for(int i = _min + 1; i < new_size - 1; i++)
+    for(long long int i = _min + 1; i < new_size - 1; i++)
         new_stack[i] = EMPT;
 
 
@@ -168,11 +168,20 @@ int Stack::Pop(MyType* pop_elem)
     // Re-hash
     _hash = HashCount();
 
+
     // SHOULD BE CHECKED FOR BAD ALLOC IN StackResize()
 
 
-    if(_n_elem < (_size - 2)/ 2)
-        StackResize((_size - 2)/2 + 2);
+    bool resize_need = false;
+
+    if(_n_elem < 2)
+        resize_need = (_n_elem < (_size - 2)/ 2)? true : false;
+    else
+        resize_need = (_n_elem < (_size - 4)/ 2)? true : false;
+
+    if(resize_need)
+        StackResize((_size - 2)/ 2 + 2);
+
 
 
     //Dump(__func__);
@@ -191,6 +200,11 @@ int Stack::Push(MyType* new_elem)
 
     // SHOULD BE CHECKED FOR BAD ALLOC IN StackResize()
 
+
+    if(_n_elem > MAX_SIZE){
+        cout << "Too much elements already placed" << endl;
+        return OVERFLOWN;
+    }
 
     if(_n_elem >= (_size - 2))
         StackResize((_size - 2)*2 + 2);
@@ -211,16 +225,18 @@ int Stack::Push(MyType* new_elem)
 
 int Stack::HashCount()
 {
-    int check_hash = _size + _n_elem;
+    long long int check_hash = 0;
+    check_hash = check_hash*2 + _size;
+    check_hash = check_hash*2 + _n_elem;
 
     int i = 0;
     while(i < _size){
         if      (_stack[i] == EDGE)
-            check_hash += EDGE_HASH;
+            check_hash = check_hash*2 + EDGE_HASH;
         else if (_stack[i] == EMPT)
-            check_hash += EMPT_HASH;
+            check_hash = check_hash*2 + EMPT_HASH;
         else
-            check_hash += _stack[i];
+            check_hash = check_hash*2 +  _stack[i];
 
         i++;
     }
@@ -254,6 +270,9 @@ bool Stack::Dump(const char* func_name, int err_code)
     cout << "Dump() in " << func_name << "():" << endl;
 
     switch (err_code){
+        case SUCCESS:
+            /*Everything is OK, just call*/
+            break;
         case FIRST_EDGE_BROKEN:
             cout << "!!! EDGE BROKEN"   << endl;
             break;
@@ -274,12 +293,12 @@ bool Stack::Dump(const char* func_name, int err_code)
         return false;
     }
 
-    cout << "_size\t= "     << _size    << endl;
-    cout << "_n_elem\t= "   << _n_elem  << endl;
-    cout << "_hash\t= "     << _hash    << endl;
+    cout << "_size\t\t= "     << _size    << endl;
+    cout << "_n_elem\t\t= "   << _n_elem  << endl;
+    cout << "_hash\t\t= "     << _hash    << endl;
 
     if(_stack == nullptr){
-        cout << "_stack\t= nullptr" << endl;
+        cout << "_stack\t\t= nullptr" << endl;
         cout << "No elements to print" << endl;
         return false;
     }
@@ -290,8 +309,9 @@ bool Stack::Dump(const char* func_name, int err_code)
         return false;
     }
 
+    cout << endl;
     for(int i = 0; i < _size; i++){
-        cout << "_stack[" << i << "] = ";
+        cout << "_stack[" << i << "]\t= ";
 
         if      (IsEdge(_stack[i]))
             cout << "EDGE" << endl;
