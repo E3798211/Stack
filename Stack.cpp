@@ -155,10 +155,12 @@ int Stack::Pop(MyType* pop_elem)
     //Dump(__func__);
     ASSERT();
 
+
     if(_n_elem < 1){
         DEBUG cout << "Not enough elements in the stack" << endl;
         return NOT_ENOUGH_ELEMENTS;
     }
+
 
 
     *pop_elem = _stack[_n_elem];

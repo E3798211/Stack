@@ -33,18 +33,13 @@ enum ERR_CODE{
     HASH_WRONG
 };
 
-/*
+
 #define ASSERT()  {                                         \
             int err = Stack::Ok();                          \
-            if (err != SUCCESS){                            \
+            if(err != SUCCESS){                            \
                 Stack::Dump(__func__, err);                 \
                 assert (0);                                 \
             }                                               \
-        }
-*/
-#define ASSERT()  {                                         \
-            int err = Stack::Ok();                          \
-                Stack::Dump(__func__, err);                 \
         }
 
 /// Type of data to be saved in stack

@@ -11,7 +11,7 @@ int main()
            c = 12;
 
 
-    Stack st;
+    //Stack st;
     /*
     cout << "init" << endl;
     cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
@@ -70,6 +70,8 @@ int main()
     cout << "elem = " << *elem_ptr << endl;
     cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
     */
+
+    Stack st;
     st.Push(&c);
     st.Push(&c);
     st.Push(&c);
@@ -80,7 +82,6 @@ int main()
     st.Pop(&a);
     st.Pop(&a);
     //cout << a << endl;
-    st.Pop(&a);
     //*(int*)&st = 0;
     st.Pop(&a);
     //cout << a << endl;
