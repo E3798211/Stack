@@ -36,7 +36,7 @@ enum ERR_CODE{
 
 #define ASSERT()  {                                         \
             int err = Stack::Ok();                          \
-            if(err != SUCCESS){                            \
+            if(err != SUCCESS){                             \
                 Stack::Dump(__func__, err);                 \
                 assert (0);                                 \
             }                                               \

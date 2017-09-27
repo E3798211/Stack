@@ -10,67 +10,6 @@ int main()
            b = 11,
            c = 12;
 
-
-    //Stack st;
-    /*
-    cout << "init" << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-    st.Push(&a);
-    cout << "elem 'a' added." << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-    st.Push(&b);
-    cout << "elem 'b' added." << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-    st.Push(&c);
-    cout << "elem 'c' added." << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-
-    MyType* elem_ptr = &a;
-
-    cout << "BEGIN" << endl;
-
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    st.Push(&c);
-    cout << "elem 'c' added." << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    st.Push(&b);
-    cout << "elem 'b' added." << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-
-    cout << "error = " << st.Pop(elem_ptr) << endl;
-    cout << "elem = " << *elem_ptr << endl;
-    cout << "_size = " << st.GetASize() << " _n_elem = " << st.GetNElem() << "\n" << endl;
-    */
-
     Stack st;
     st.Push(&c);
     st.Push(&c);
@@ -91,5 +30,22 @@ int main()
     //cout << st.Get(0) << endl;
     //cout << st.Get(1) << endl;
     //cout << st.Get(2) << endl;
+
+/*    MyType a = 5;
+    Stack st;
+    int p = 2;
+
+
+    for(int i = 0; i < 200; i++){
+        st.Push(&a);
+        if (i == p - 2) {
+            for(int j = 0; j < 3; j++){
+                st.Push(&a);
+                st.Pop(&a);
+                st.Ok();
+            }
+            p *= 2;
+        }
+    }*/
 }
 

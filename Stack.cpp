@@ -25,8 +25,10 @@ int Stack::StackResize(long long int new_size)
     }
 
 
+    // REMAKE
+
+
     new_stack[0]            = EDGE;
-    new_stack[new_size - 1] = EDGE;
 
     long long int _min = (_n_elem < new_size)? _n_elem : new_size;
     for(long long int i = 0; i < _min + 1; i++)
@@ -35,6 +37,7 @@ int Stack::StackResize(long long int new_size)
     for(long long int i = _min + 1; i < new_size - 1; i++)
         new_stack[i] = EMPT;
 
+    new_stack[new_size - 1] = EDGE;
 
     //Swap
     MyType* tmp = _stack;
@@ -176,6 +179,7 @@ int Stack::Pop(MyType* pop_elem)
 
     bool resize_need = false;
 
+    //n/4
     if(_n_elem < 2)
         resize_need = (_n_elem < (_size - 2)/ 2)? true : false;
     else
