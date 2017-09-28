@@ -24,14 +24,10 @@ int Stack::StackResize(long long int new_size)
         return BAD_ALLOC;
     }
 
-
-    // REMAKE
-
-
     new_stack[0]            = EDGE;
 
     long long int _min = (_n_elem < new_size)? _n_elem : new_size;
-    for(long long int i = 0; i < _min + 1; i++)
+    for(long long int i = 1; i < _min + 1; i++)
         new_stack[i] = _stack[i];
 
     for(long long int i = _min + 1; i < new_size - 1; i++)

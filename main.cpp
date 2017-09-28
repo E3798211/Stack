@@ -12,6 +12,7 @@ int main()
 
     Stack st;
     st.Push(&c);
+    //st.Dump("main", 0);
     st.Push(&c);
     st.Push(&c);
     st.Push(&a);
