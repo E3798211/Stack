@@ -7,7 +7,6 @@ int Stack::StackResize(long long int new_size)
     // Exceptions
     assert(new_size > 0);
 
-    //Dump(__func__);
     ASSERT();
 
     _size = new_size;
@@ -18,8 +17,6 @@ int Stack::StackResize(long long int new_size)
     }
     catch(const std::bad_alloc& ex){
         DEBUG cout << ERR_WHERE << ". Cannot allocate " << new_size << " bytes." << endl;
-
-        //Dump(__func__);
         ASSERT();
         return BAD_ALLOC;
     }
@@ -27,6 +24,7 @@ int Stack::StackResize(long long int new_size)
     new_stack[0]            = EDGE;
 
     long long int _min = (_n_elem < new_size)? _n_elem : new_size;
+
     for(long long int i = 1; i < _min + 1; i++)
         new_stack[i] = _stack[i];
 
@@ -47,8 +45,6 @@ int Stack::StackResize(long long int new_size)
     delete [] new_stack;
     new_stack = nullptr;
 
-
-    //Dump(__func__);
     ASSERT();
     return SUCCESS;
 }
@@ -67,7 +63,6 @@ bool Stack::IsEmpt(MyType elem)
 
 Stack::Stack()
 {
-    //Dump(__func__);
     ASSERT();
 
     _stack  = new MyType[3];
@@ -78,17 +73,16 @@ Stack::Stack()
 
     _size       = 3;
     _n_elem     = 0;
-
     _hash       = HashCount();
 
-    //Dump(__func__);
     ASSERT();
 }
 
 Stack::~Stack()
 {
     ASSERT();
-    if(_size > 0){
+
+    if(_stack != nullptr){
         delete [] _stack;
         _stack  = nullptr;
 
@@ -96,6 +90,7 @@ Stack::~Stack()
         _n_elem = DELETED;
         _hash   = HashCount();
     }
+
     ASSERT();
 }
 
@@ -151,15 +146,12 @@ int Stack::Pop(MyType* pop_elem)
     //Exceptions
     assert(pop_elem != nullptr);
 
-    //Dump(__func__);
     ASSERT();
-
 
     if(_n_elem < 1){
         DEBUG cout << "Not enough elements in the stack" << endl;
         return NOT_ENOUGH_ELEMENTS;
     }
-
 
 
     *pop_elem = _stack[_n_elem];
@@ -175,7 +167,6 @@ int Stack::Pop(MyType* pop_elem)
 
     bool resize_need = false;
 
-    //n/4
     if(_n_elem < 2)
         resize_need = (_n_elem < (_size - 2)/ 2)? true : false;
     else
@@ -185,8 +176,6 @@ int Stack::Pop(MyType* pop_elem)
         StackResize((_size - 2)/ 2 + 2);
 
 
-
-    //Dump(__func__);
     ASSERT();
     return SUCCESS;
 }
@@ -196,7 +185,6 @@ int Stack::Push(MyType* new_elem)
     //Exceptions
     assert(new_elem != nullptr);
 
-    //Dump(__func__);
     ASSERT();
 
 
@@ -217,7 +205,6 @@ int Stack::Push(MyType* new_elem)
     // Re-hash
     _hash = HashCount();
 
-    //Dump(__func__);
     ASSERT();
     return SUCCESS;
 }
@@ -255,13 +242,6 @@ int Stack::Ok()
 
     if(_hash != HashCount())
         return HASH_WRONG;
-
-    /*
-    if(_n_elem < 0)
-        return false;
-    if(_size   < 0)
-        return false;
-    */
 
     return SUCCESS;
 }

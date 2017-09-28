@@ -45,9 +45,9 @@ enum ERR_CODE{
 /// Type of data to be saved in stack
 typedef double MyType;
 
-const MyType EDGE = 123456789;
-const MyType EMPT = 987654321;
-const int DELETED = -1;
+const MyType EDGE   = 123456789;
+const MyType EMPT   = 987654321;
+const int DELETED   = -1;
 
 const int EDGE_HASH = 1;
 const int EMPT_HASH = 2;
@@ -108,17 +108,7 @@ public:
     int  Ok();
 
     bool Dump(const char* func_name, int err_code = SUCCESS);
-
-
-    MyType GetPos(int pos)  {return _stack[pos];}
-
-    int GetSize()           {return _size;}
-
-    int GetNElem()          {return _n_elem;}
-
-
 private:
-    // Last element in stack object. Probably...
     /// Last canary
     int _edge_2 = EDGE;
 };
